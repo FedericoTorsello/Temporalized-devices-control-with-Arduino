@@ -20,13 +20,14 @@ const unsigned long HOUR = 3600UL * SECOND;
 
 auto h = [](uint8_t x) { return x * HOUR; };
 auto m = [](uint8_t x) { return x * MINUTE; };
+auto s = [](uint8_t x) { return x * SECOND; };
 
 unsigned long matrice[][5] ={
     //WHO - start - WHEN_START - DURATIO- CURRENT MILLIS
-    //{ LED_BUILTIN, 0, 2000, 3000, 0 },
-    { WATER_PUMP1, false, 6000, 6000, 0 }, //pin2
-    { WATER_PUMP2, false, 3000, 6000, 0 }, //pin4
-    { WATER_PUMP3, false, 4000, 6000, 0 } //pin7
+    { LED_BUILTIN, false, s(1), s(10), 0 },
+    { WATER_PUMP1, false, h(20), m(2), 0 }, //pin2
+    { WATER_PUMP2, false, h(22), m(2), 0 }, //pin4
+    { WATER_PUMP3, false, h(24), m(2), 0 }  //pin7
 };
 
 uint8_t nColums = sizeof(matrice)/sizeof(matrice[0]);
@@ -53,10 +54,7 @@ void myTask(unsigned long &previousMillis, bool &isTurnOn, uint8_t currentPin, u
         Serial.println("============");
         Serial.print(F("| TURN OFF\t"));
         Serial.println(currentPin);
-
         Serial.print(F("| WhenStart:\t"));
-        //Serial.print(whenStart/HOUR);
-        //Serial.print(F(" Hours\t"));
         Serial.println(whenStart);
         Serial.println("============\n");
 
@@ -70,8 +68,6 @@ void myTask(unsigned long &previousMillis, bool &isTurnOn, uint8_t currentPin, u
         Serial.print(F("| TURN ON\t"));
         Serial.println(currentPin);
         Serial.print(F("| Duration:\t"));
-        //Serial.print(duration/MINUTE);
-        //Serial.print(F(" Minutes\n"));
         Serial.println(duration);
         Serial.println("&&&&&&&&&&&\n");
 
