@@ -1,12 +1,6 @@
 #include <Arduino.h>
-
-/*
-const uint8_t pin2 = 2;
-const uint8_t pin4 = 4;
-const uint8_t pin7 = 7;
-const uint8_t pin8 = 8;
-const uint8_t pin12 = 12;
-*/
+#include "./task/WaterPump.hpp"
+#include "./task/Log.hpp"
 
 const uint8_t WATER_PUMP1 = 2;
 const uint8_t WATER_PUMP2 = 4;
@@ -22,34 +16,47 @@ auto h = [](uint8_t x) { return x * HOUR; };
 auto m = [](uint8_t x) { return x * MINUTE; };
 auto s = [](uint8_t x) { return x * SECOND; };
 
-unsigned long matrice[][5] ={
-    //WHO - start - WHEN_START - DURATIO- CURRENT MILLIS
-    { LED_BUILTIN, false, s(1), s(10), 0 },
-    { WATER_PUMP1, false, h(20), m(2), 0 }, //pin2
-    { WATER_PUMP2, false, h(22), m(2), 0 }, //pin4
-    { WATER_PUMP3, false, h(24), m(2), 0 }  //pin7
+WaterPump waterPumpArray[] = {
+    WaterPump(LED_BUILTIN, s(2), s(10)),
+    WaterPump(LED_BUILTIN, s(10), s(60)),
+    WaterPump(LED_BUILTIN, s(20), s(30))};
+
+unsigned long matrice[][5] = {
+    //WHO - start - WHEN_START - DURATION - CURRENT MILLIS
+    {LED_BUILTIN, true, s(1), s(10), 0},
+    {WATER_PUMP1, true, h(20), m(2), 0}, //pin2
+    {WATER_PUMP2, true, h(22), m(2), 0}, //pin4
+    {WATER_PUMP3, true, h(24), m(2), 0}  //pin7
 };
 
-uint8_t nColums = sizeof(matrice)/sizeof(matrice[0]);
+uint8_t nColums = sizeof(matrice) / sizeof(matrice[0]);
 
 void setup()
 {
-    Serial.begin(9600);
-    while (!Serial);
+    Log(9600);
+    Log::message("ciao");
 
-    for (auto &&i : matrice)
+    for(auto &i : waterPumpArray){
+        i.switchOff();
+        delay(1000);
+        i.switchOn();
+        delay(1000);
+    }
+
+    /*for (auto &&i : matrice)
     {
         uint8_t currentPin = i[0];
         bool isTurnOn = (bool)i[1];
         pinMode(currentPin, OUTPUT);
         digitalWrite(currentPin, isTurnOn);
-    }
+    }*/
 }
 
-void myTask(unsigned long &previousMillis, bool &isTurnOn, uint8_t currentPin, unsigned long whenStart, unsigned long duration) {
+void myTask(unsigned long &previousMillis, bool &isTurnOn, uint8_t currentPin, unsigned long whenStart, unsigned long duration)
+{
 
     unsigned long currentMillis = millis();
-    if (isTurnOn && (currentMillis - previousMillis >= whenStart))
+    if ((isTurnOn == HIGH) && (currentMillis - previousMillis >= whenStart))
     {
         Serial.println("============");
         Serial.print(F("| TURN OFF\t"));
@@ -58,11 +65,11 @@ void myTask(unsigned long &previousMillis, bool &isTurnOn, uint8_t currentPin, u
         Serial.println(whenStart);
         Serial.println("============\n");
 
-        isTurnOn = LOW;  // Turn it off
-        previousMillis = currentMillis;  // Remember the time
-        digitalWrite(currentPin, isTurnOn);  // Update the actual LED
+        isTurnOn = LOW;                     // Turn it off
+        previousMillis = currentMillis;     // Remember the time
+        digitalWrite(currentPin, isTurnOn); // Update the actual LED
     }
-    else if (!isTurnOn && (currentMillis - previousMillis >= duration))
+    else if ((isTurnOn == LOW) && (currentMillis - previousMillis >= duration))
     {
         Serial.println("&&&&&&&&&&&");
         Serial.print(F("| TURN ON\t"));
@@ -71,15 +78,15 @@ void myTask(unsigned long &previousMillis, bool &isTurnOn, uint8_t currentPin, u
         Serial.println(duration);
         Serial.println("&&&&&&&&&&&\n");
 
-        isTurnOn = HIGH;  // turn it on
-        previousMillis = currentMillis;   // Remember the time
-        digitalWrite(currentPin, isTurnOn);	  // Update the actual LED
+        isTurnOn = HIGH;                    // turn it on
+        previousMillis = currentMillis;     // Remember the time
+        digitalWrite(currentPin, isTurnOn); // Update the actual LED
     }
 }
 
 void loop()
 {
-    for (auto &&i : matrice)
+    /*for (auto &&i : matrice)
     {
         uint8_t currentPin = i[0];
         bool isTurnOn = (bool)i[1];
@@ -90,5 +97,5 @@ void loop()
         myTask(previousMillis, isTurnOn, currentPin, whenStart, duration);
         i[1] = isTurnOn;
         i[4] = previousMillis;
-    }
+    }*/
 }

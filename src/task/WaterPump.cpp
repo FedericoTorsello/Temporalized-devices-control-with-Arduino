@@ -1,22 +1,21 @@
-#include "WaterPump.h"
+#include "WaterPump.hpp"
 
-WaterPump::WaterPump()
+WaterPump::WaterPump(uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun)
 {
-    this->_isActive = false;
-}
+    this->pin = pin;
+    this->afterHowLongToStart = afterHowLongToStart;
+    this->howLongToRun = howLongToRun;
 
-WaterPump::WaterPump(bool isActive)
-{
-    this->_isActive = isActive;
+    super::switchOffPin(pin);
 }
 
 WaterPump::~WaterPump()
 {
 }
 
-void WaterPump::setStatus(bool newValue)
+bool WaterPump::isActiveX()
 {
-    this->_isActive = newValue;
+    return isActive;
 }
 
 void WaterPump::task(unsigned long period, void (*t)())
@@ -27,4 +26,12 @@ void WaterPump::task(unsigned long period, void (*t)())
         previousMillis = currentMillis; // save the last time you blinked the LED
         t();
     }
+}
+
+void WaterPump::switchOff(){
+    switchOffPin(pin);
+}
+
+void WaterPump::switchOn(){
+    switchOnPin(pin);
 }
