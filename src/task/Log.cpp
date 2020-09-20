@@ -10,12 +10,32 @@ Log::~Log()
 {
 }
 
-void Log::message(String pin)
+void Log::message(String msg, bool isFrameVisible)
 {
-    Serial.println("MSG:" + pin);
+    if (isFrameVisible)
+    {
+        Serial.println("=========================================");
+    }
+
+    Serial.println(msg);
+
+    if (isFrameVisible)
+    {
+        Serial.println("=========================================");
+    }
 }
 
-void Log::error(String pin)
+void Log::error(String msg, bool isFrameVisible)
 {
-    Serial.println("ERR:" + pin);
+    if (isFrameVisible)
+    {
+        Serial.println("=========================================");
+    }
+
+    Serial.println("ERR: " + msg);
+
+    if (isFrameVisible)
+    {
+        Serial.println("=========================================");
+    }
 }

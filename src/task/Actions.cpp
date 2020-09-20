@@ -1,24 +1,19 @@
 #include "Actions.hpp"
 
-Actions::Actions()
-{
-    Log::message("Actions ");
-}
+Actions::Actions() {}
 
-Actions::~Actions()
-{
-}
+Actions::~Actions() {}
 
 void Actions::switchOnPin(uint8_t pin)
 {
-    Log::message("Switch on pin: " + String(pin));
+    Log::message("ACTION:\tSwitch off pin:\t\t" + String(pin));
     pinMode(pin, OUTPUT);
-    digitalWrite(pin, LOW);
+    digitalWrite(pin, HIGH);
 }
 
 void Actions::switchOffPin(uint8_t pin)
 {
-    Log::message("Switch off pin: " + String(pin));
+    Log::message("ACTION:\tSwitch on pin:\t\t" + String(pin));
     pinMode(pin, OUTPUT);
-    digitalWrite(pin, HIGH);
+    digitalWrite(pin, LOW);
 }

@@ -11,8 +11,8 @@ public:
     Log(unsigned long);
     ~Log();
 
-    static void message(String);
-    static void error(String);
+    static void message(String msg, bool isFrameVisible = true);
+    static void error(String msg, bool isFrameVisible = true);
 };
 
 #endif // LOG_HPP
