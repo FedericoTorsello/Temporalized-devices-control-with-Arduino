@@ -10,6 +10,10 @@ WaterPump::WaterPump(String id, uint8_t pin, unsigned long afterHowLongToStart, 
     if (pin == 0)
     {
         Log::error("PIN NOT SET!");
+        while (1)
+        {
+        }
+        
     }
 }
 
@@ -36,15 +40,15 @@ void WaterPump::task(void (*t)())
 
 void WaterPump::turnSwitchPinOff()
 {
-    _isTurnOn = LOW; // Turn it off
-    switchOnPin(_pin);
-    description();    
+    _isTurnOn = LOW; 
+    switchOnPin(_pin); // Turn it off
+    description();
 }
 
 void WaterPump::turnSwitchPinOn()
 {
-    _isTurnOn = HIGH; // Turn it on
-    switchOffPin(_pin);
+    _isTurnOn = HIGH; 
+    switchOffPin(_pin);  // Turn it on 
     description();
 }
 
@@ -62,16 +66,16 @@ void WaterPump::description()
 void WaterPump::runTask()
 {
     _currentMillis = millis();
-    if ((_isTurnOn == HIGH) && (_currentMillis - _previousMillis >= _afterHowLongToStart))
+    if ((_isTurnOn == HIGH) && (_currentMillis - _previousMillis >= _howLongToRun))
     {
         turnSwitchPinOff();
 
-        _previousMillis = _currentMillis; // Remember the time
+        _previousMillis = _currentMillis;
     }
-    else if ((_isTurnOn == LOW) && (_currentMillis - _previousMillis >= _howLongToRun))
+    else if ((_isTurnOn == LOW) && (_currentMillis - _previousMillis >= _afterHowLongToStart))
     {
         turnSwitchPinOn();
 
-        _previousMillis = _currentMillis; // Remember the time
+        _previousMillis = _currentMillis;
     }
 }

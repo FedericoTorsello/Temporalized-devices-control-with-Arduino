@@ -6,13 +6,14 @@
 class Log
 {
 private:
-    /* data */
+    static void printFrame(bool isFrameVisible);
 public:
     Log(unsigned long);
     ~Log();
 
     static void message(String msg, bool isFrameVisible = true);
     static void error(String msg, bool isFrameVisible = true);
+    //static void isEnabled(bool isEnabled);
 };
 
 #endif // LOG_HPP

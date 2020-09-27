@@ -5,17 +5,19 @@
 
 typedef struct
 {
-    String value;
     WaterPump *waterPump;
 } componentDictionary;
 
 const componentDictionary componentArray[]{
-    {"ID-01", new WaterPump("ID-01", LED_BUILTIN, Time::second(5), Time::second((10)))},
-    {"ID-02", new WaterPump("ID-02", 14, Time::second(5), Time::second((10)))}};
+    {new WaterPump("ID-01", LED_BUILTIN, Time::second(5), Time::second(10))},
+    {new WaterPump("ID-02", 2, Time::second(2), Time::second(10))},
+    {new WaterPump("ID-03", 4, Time::second(2), Time::second(10))},
+    {new WaterPump("ID-04", 7, Time::second(2), Time::second(10))}};
 
 void setup()
 {
-    Log(9600);
+    Log(115200);
+    //Log::isEnabled(false);
     Log::message("SETUP PROGRAM");
 
     for (auto &i : componentArray)

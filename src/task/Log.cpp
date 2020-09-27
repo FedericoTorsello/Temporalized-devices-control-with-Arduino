@@ -1,9 +1,15 @@
 #include "Log.hpp"
 
+bool _isEnabled = false;
+
 Log::Log(unsigned long baud)
 {
-    delay(1000);
-    Serial.begin(baud);
+    if (baud > 0)
+    {
+        _isEnabled = true;
+        delay(1000);
+        Serial.begin(baud);
+    }
 }
 
 Log::~Log()
@@ -12,30 +18,44 @@ Log::~Log()
 
 void Log::message(String msg, bool isFrameVisible)
 {
-    if (isFrameVisible)
+    if (!_isEnabled)
     {
-        Serial.println("=========================================");
+        return;
     }
+    else
+    {
+        printFrame(isFrameVisible);
 
-    Serial.println(msg);
+        Serial.print(msg + "\n");
 
+        printFrame(isFrameVisible);
+    }
+}
+
+void Log::printFrame(bool isFrameVisible)
+{
     if (isFrameVisible)
     {
-        Serial.println("=========================================");
+        Serial.print("------------------------------------------\n");
+    }
+    else
+    {
+        Serial.print('\n');
     }
 }
 
 void Log::error(String msg, bool isFrameVisible)
 {
-    if (isFrameVisible)
+    if (!_isEnabled)
     {
-        Serial.println("=========================================");
+        return;
     }
-
-    Serial.println("ERR: " + msg);
-
-    if (isFrameVisible)
+    else
     {
-        Serial.println("=========================================");
+        printFrame(isFrameVisible);
+
+        Serial.print("ERR: " + msg + "\n");
+
+        printFrame(isFrameVisible);
     }
 }
