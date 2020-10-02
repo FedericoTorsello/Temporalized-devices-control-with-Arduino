@@ -1,20 +1,81 @@
-#include "WaterPump.h"
+#include "WaterPump.hpp"
 
-WaterPump::WaterPump()
+WaterPump::WaterPump(String id, uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun)
 {
-    
-}
+    this->_id = id;
+    this->_pin = pin;
+    this->_afterHowLongToStart = afterHowLongToStart;
+    this->_howLongToRun = howLongToRun;
 
-WaterPump::WaterPump(bool isActive)
-{
-    this->_isActive = isActive;
+    if (pin == 0)
+    {
+        Log::error("PIN NOT SET!");
+        while (1)
+        {
+        }
+        
+    }
 }
 
 WaterPump::~WaterPump()
 {
 }
 
-void WaterPump::setStatus(bool newValue)
+void WaterPump::task(void (*t)())
 {
-    this->_isActive = newValue;
+    _currentMillis = millis();
+    if ((_isTurnOn == HIGH) && (_currentMillis - _previousMillis >= _afterHowLongToStart))
+    {
+        t();
+
+        _previousMillis = _currentMillis; // Remember the time
+    }
+    else if ((_isTurnOn == LOW) && (_currentMillis - _previousMillis >= _howLongToRun))
+    {
+        t();
+
+        _previousMillis = _currentMillis; // Remember the time
+    }
+}
+
+void WaterPump::turnSwitchPinOff()
+{
+    _isTurnOn = LOW; 
+    switchOnPin(_pin); // Turn it off
+    description();
+}
+
+void WaterPump::turnSwitchPinOn()
+{
+    _isTurnOn = HIGH; 
+    switchOffPin(_pin);  // Turn it on 
+    description();
+}
+
+void WaterPump::description()
+{
+    String status = _isTurnOn ? "YES" : "NO";
+    String msg = "WATER_PUMP N°:\t\t\t" + String(_id) + "\nPIN N°:\t\t\t\t" + String(_pin) +
+                 "\nIS SWITCH PIN TURN ON:\t\t" + status +
+                 +"\nAFTER HOW LONG TO START:\t" + String(_afterHowLongToStart) + " ms" +
+                 +"\nHOW LONG TO RUN:\t\t" + String(_howLongToRun) + " ms";
+
+    Log::message(msg);
+}
+
+void WaterPump::runTask()
+{
+    _currentMillis = millis();
+    if ((_isTurnOn == HIGH) && (_currentMillis - _previousMillis >= _howLongToRun))
+    {
+        turnSwitchPinOff();
+
+        _previousMillis = _currentMillis;
+    }
+    else if ((_isTurnOn == LOW) && (_currentMillis - _previousMillis >= _afterHowLongToStart))
+    {
+        turnSwitchPinOn();
+
+        _previousMillis = _currentMillis;
+    }
 }

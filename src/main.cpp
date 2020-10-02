@@ -1,82 +1,37 @@
 #include <Arduino.h>
-//#include "task/WaterPump.h"
-#include "ReactiveArduinoLib.h"
+#include "./task/WaterPump.hpp"
+#include "./task/Log.hpp"
+#include "./task/Time.hpp"
 
-using namespace Reactive;
+typedef struct
+{
+    WaterPump *waterPump;
+} componentDictionary;
 
-//WaterPump waterPump;
-
-/*const int pin12 = 11;
-
-auto reactiveInput = Reactive::FromDigitalInput(pin12, INPUT_PULLUP);
-
-auto observableIntSerialOutput = Reactive::Property<int>();
+const componentDictionary componentArray[]{
+    {new WaterPump("ID-01", LED_BUILTIN, Time::second(5), Time::second(10))},
+    {new WaterPump("ID-02", 2, Time::second(2), Time::second(10))},
+    {new WaterPump("ID-03", 4, Time::second(2), Time::second(10))},
+    {new WaterPump("ID-04", 7, Time::second(2), Time::second(10))}};
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial)
-    delay(1);
+    Log(115200);
+    //Log::isEnabled(false);
+    Log::message("SETUP PROGRAM");
 
-  //pinMode(LED_BUILTIN, OUTPUT);
-
-  observableIntSerialOutput.ToSerial();
-
-  reactiveInput
-      .If([](int x) { return x== 1; },
-          [](int x) { Serial.println(10 * x); })
-      .DoNothing();
+    for (auto &i : componentArray)
+    {
+        auto component = i.waterPump;
+        component->description();
+    }
 }
 
 void loop()
 {
-  reactiveInput.Next();
-}*/
-
-auto reactiveInput = Reactive::FromDigitalInput(10, INPUT_PULLUP);
-
-auto observableManual = Reactive::ManualDefer<int>();
-
-bool isNotified;
-bool isNotified2;
-
-void setup()
-{
-  Serial.begin(115200);
-  while (!Serial)
-    delay(1);
-
-  observableManual
-      .Toggle()
-      .ToDigitalOutput(LED_BUILTIN);
-
-  //observableManual.Next();
-
-  reactiveInput
-      .If([](int x) { return x == HIGH; },
-          [](int x) {
-            if (!isNotified)
-            {
-              Serial.println("La pompa è accesa");
-              isNotified = true;
-              isNotified2 = false;
-              observableManual.Next();
-            }
-          })
-      .If([](int x) { return x == LOW; },
-          [](int x) {
-            if (!isNotified2)
-            {
-              Serial.println("La pompa è spenta");
-              isNotified = false;
-              isNotified2 = true;
-              observableManual.Next();
-            }
-          })
-      .DoNothing();
-}
-
-void loop()
-{
-  reactiveInput.Next();
+    for (auto &i : componentArray)
+    {
+        auto current = i.waterPump;
+        current->runTask();
+    }
 }
