@@ -1,6 +1,6 @@
-#include "WaterPump.hpp"
+#include "Device.hpp"
 
-WaterPump::WaterPump(String id, uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun)
+Device::Device(String id, uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun)
 {
     this->_id = id;
     this->_pin = pin;
@@ -8,11 +8,11 @@ WaterPump::WaterPump(String id, uint8_t pin, unsigned long afterHowLongToStart, 
     this->_howLongToRun = howLongToRun;
 }
 
-WaterPump::~WaterPump()
+Device::~Device()
 {
 }
 
-/*void WaterPump::task(void (*t)())
+/*void Device::task(void (*t)())
 {
     _currentMillis = millis();
     if ((_isTurnOn == HIGH) && (_currentMillis - _previousMillis >= _afterHowLongToStart))
@@ -29,21 +29,29 @@ WaterPump::~WaterPump()
     }
 }*/
 
-void WaterPump::turnSwitchPinOff()
+void Device::turnSwitchPinOff()
 {
-    _isTurnOn = LOW; 
+    _isTurnOn = LOW;
     switchOnPin(_pin); // Turn it off
     description();
 }
 
-void WaterPump::turnSwitchPinOn()
+void Device::turnSwitchPinOn()
 {
-    _isTurnOn = HIGH; 
-    switchOffPin(_pin);  // Turn it on 
+    _isTurnOn = HIGH;
+    switchOffPin(_pin); // Turn it on
     description();
 }
 
-void WaterPump::description()
+void Device::description()
+{
+}
+
+void Device::runTask()
+{
+}
+
+/*void Device::description()
 {
     String status = _isTurnOn ? "YES" : "NO";
     String msg = "WATER_PUMP:\t\t\t" + String(_id) + "\nPIN N°:\t\t\t\t" + String(_pin) +
@@ -52,9 +60,9 @@ void WaterPump::description()
                  +"\nHOW LONG TO RUN:\t\t" + String(_howLongToRun) + " ms";
 
     Log::message(msg);
-}
+}*/
 
-void WaterPump::runTask()
+/*void Device::runTask()
 {
     _currentMillis = millis();
 
@@ -70,4 +78,4 @@ void WaterPump::runTask()
 
         _previousMillis = _currentMillis;
     }
-}
+}*/

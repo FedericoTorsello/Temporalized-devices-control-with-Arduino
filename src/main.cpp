@@ -1,4 +1,5 @@
 #include <Arduino.h>
+//#include "./task/Device.hpp"
 #include "./task/WaterPump.hpp"
 #include "./task/Log.hpp"
 #include "./task/Time.hpp"
@@ -9,15 +10,17 @@ typedef struct
 } componentDictionary;
 
 const componentDictionary componentArray[]{
-    {new WaterPump("ID-01", LED_BUILTIN, Time::second(5), Time::second(10))},
-    {new WaterPump("ID-02", 2, Time::second(2), Time::second(10))},
-    {new WaterPump("ID-03", 4, Time::second(2), Time::second(10))},
-    {new WaterPump("ID-04", 7, Time::second(2), Time::second(10))}};
+    new WaterPump("TEST", LED_BUILTIN, Time::second(5), Time::second(2)),
+    new WaterPump("RED-BLACK", 2, Time::hour(12), Time::second(30)),
+    new WaterPump("YELLOW-GREEN", 4, Time::hour(12), Time::second(30)),
+    new WaterPump("BLUE-WHITE", 7, Time::hour(12), Time::second(30))
+};
 
 void setup()
-{
-    Log(115200);
-    //Log::isEnabled(false);
+{    
+    delay(1000);
+    
+    Log(9600);
     Log::message("SETUP PROGRAM");
 
     for (auto &i : componentArray)

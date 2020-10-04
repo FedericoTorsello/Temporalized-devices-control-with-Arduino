@@ -1,12 +1,11 @@
-#if !defined(WATER_PUMP_HPP)
-#define WATER_PUMP_HPP
+#if !defined(DEVICE)
+#define DEVICE
 
 #include <Arduino.h>
-//#include "Device.hpp"
 #include "Actions.hpp"
 #include "Log.hpp"
 
-class WaterPump : Actions
+class Device : public Actions
 {
 private:
     bool _isTurnOn = HIGH;
@@ -22,11 +21,11 @@ private:
     void turnSwitchPinOff();
 
 public:
-    WaterPump(String id, uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun);
-    ~WaterPump();
-    //WaterPump::WaterPump(Device*);
-    void runTask();
-    void description();
+    Device(String id, uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun);
+    ~Device();
+
+    virtual void runTask();
+    virtual void description();
 };
 
-#endif // WATER_PUMP_HPP
+#endif // DEVICE

@@ -13,7 +13,6 @@ public:
 
     static void message(String msg, bool isFrameVisible = true);
     static void error(String msg, bool isFrameVisible = true);
-    //static void isEnabled(bool isEnabled);
 };
 
 #endif // LOG_HPP
