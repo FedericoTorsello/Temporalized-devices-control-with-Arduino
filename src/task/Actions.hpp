@@ -12,8 +12,8 @@ public:
     Actions();
     ~Actions();
 protected:
-    void switchOnPin(uint8_t pin);
-    void switchOffPin(uint8_t pin);
+    virtual void switchOnPin(uint8_t pin) final;
+    virtual void switchOffPin(uint8_t pin) final;
 };
 
 #endif // ACTIONS_HPP

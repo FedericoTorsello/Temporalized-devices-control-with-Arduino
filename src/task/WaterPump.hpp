@@ -15,6 +15,7 @@ private:
     unsigned long _howLongToRun;
     unsigned long _currentMillis;
     unsigned long _previousMillis;
+    unsigned long _offset;
     String _id;
     String _description;
     //void task(void (*t)());
@@ -22,7 +23,7 @@ private:
     void turnSwitchPinOff();
 
 public:
-    WaterPump(String id, uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun);
+    WaterPump(String id, uint8_t pin, unsigned long afterHowLongToStart, unsigned long howLongToRun, unsigned long offset);
     ~WaterPump();
     //WaterPump::WaterPump(Device*);
     void runTask();

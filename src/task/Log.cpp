@@ -23,7 +23,8 @@ void Log::message(String msg, bool isFrameVisible)
 
 void Log::printFrame(bool isFrameVisible)
 {
-    if (isFrameVisible){
+    if (isFrameVisible)
+    {
         Serial.print('\n');
         Serial.print(F("---.---.---.---.---"));
     }
